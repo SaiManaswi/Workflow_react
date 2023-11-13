@@ -1,25 +1,75 @@
-import logo from './logo.svg';
-import './App.css';
+import { useCallback, useState } from 'react';
+import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges, Background, MarkerType } from 'reactflow';
+import 'reactflow/dist/style.css';
 
-function App() {
+import TextUpdaterNode from './CustomNode.js';
+
+import './overview.css'
+
+const rfStyle = {
+  backgroundColor: 'white',
+};
+
+
+
+// we define the nodeTypes outside of the component to prevent re-renderings
+// you could also use useMemo inside the component
+const nodeTypes = { textUpdater: TextUpdaterNode };
+
+function Flow() {
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  const [count, setcount] = useState(1)
+
+  const onNodesChange = useCallback(
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    [setNodes]
+  );
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    [setEdges]
+  );
+  const onConnect = useCallback(
+    (connection) => setEdges((eds) => addEdge(connection, eds)),
+    [setEdges]
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ width: '50vw', height: '100vh', display: 'flex', flexDirection: 'row' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        
+        style={rfStyle}
+      >
+        <Background color="#aaa" gap={16} />
+      </ReactFlow>
+      <div>
+        <button onClick={() => {
+          setNodes([...nodes, { id: `node-${count}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `Stage-${count}` } }])
+          if (count !== 1)
+            setEdges([...edges, {
+              id: `e${count - 1}-${count}`, source: `node-${count - 1}`, target: `node-${count}`, markerEnd: {
+                type: MarkerType.ArrowClosed,
+                width: 20,
+                height: 20,
+                color: 'black',
+              },
+              style: {
+                strokeWidth: 1,
+                stroke: 'green',
+              },
+              animated: true
+            }])
+          setcount(count + 1)
+        }}>Add Node</button>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default Flow;
