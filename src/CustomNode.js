@@ -23,6 +23,7 @@ function TextUpdaterNode({ data, isConnectable }) {
           })
         }
         <button onClick={() => setatt([...att,att[att.length-1]+1])} style={{ display: 'block', margin: '5px auto auto auto' }}>Add</button>
+        
       </div>
 
       <Handle type="source" position={Position.Bottom} id="b" isConnectable={isConnectable}/>
