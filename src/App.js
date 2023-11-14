@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges, Background, MarkerType } from 'reactflow';
+import { useCallback, useState,useRef } from 'react';
+import ReactFlow, { applyEdgeChanges, applyNodeChanges, Background, MarkerType,updateEdge } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import TextUpdaterNode from './CustomNode.js';
@@ -17,9 +17,28 @@ const rfStyle = {
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 function Flow() {
+  const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [count, setcount] = useState(1)
+
+
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
+
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true;
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+  }, []);
+
+  const onEdgeUpdateEnd = useCallback((_, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+
+    edgeUpdateSuccessful.current = true;
+  }, []);
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -30,8 +49,22 @@ function Flow() {
     [setEdges]
   );
   const onConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
+    (connection) => {
+      console.log(connection)
+      setEdges([...edges, {
+        id: `e${connection.source}-${connection.target}`, source: `${connection.source}`, target: `${connection.target}`, markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: 'black',
+        },
+        style: {
+          strokeWidth: 1,
+          stroke: 'green',
+        },
+        animated: true
+      }])
+    }
   );
 
   return (
@@ -43,7 +76,9 @@ function Flow() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
-        
+        onEdgeUpdate={onEdgeUpdate}
+        onEdgeUpdateStart={onEdgeUpdateStart}
+        onEdgeUpdateEnd={onEdgeUpdateEnd}
         style={rfStyle}
       >
         <Background color="#aaa" gap={16} />
