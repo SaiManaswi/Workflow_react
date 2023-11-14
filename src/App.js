@@ -16,7 +16,7 @@ const rfStyle = {
 // you could also use useMemo inside the component
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
-function Flow() {
+function Flow(props) {
   const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -64,7 +64,7 @@ function Flow() {
         },
         animated: true
       }])
-    }
+    },[edges]
   );
 
   return (
@@ -86,20 +86,7 @@ function Flow() {
       <div>
         <button onClick={() => {
           setNodes([...nodes, { id: `node-${count}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `Stage-${count}` } }])
-          if (count !== 1)
-            setEdges([...edges, {
-              id: `e${count - 1}-${count}`, source: `node-${count - 1}`, target: `node-${count}`, markerEnd: {
-                type: MarkerType.ArrowClosed,
-                width: 20,
-                height: 20,
-                color: 'black',
-              },
-              style: {
-                strokeWidth: 1,
-                stroke: 'green',
-              },
-              animated: true
-            }])
+          
           setcount(count + 1)
         }}>Add Node</button>
       </div>
