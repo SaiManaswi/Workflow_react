@@ -37,4 +37,20 @@
   }
 }
 
+ReactFlow{
+border: 1px solid black;
+padding: 5px;
+}
+
+.buttons{
+  width: 50vw;
+  display: flex;
+  height: 10vh;
+  justify-content: space-between;
+
+}
+
+.buttons button{
+
+}
 

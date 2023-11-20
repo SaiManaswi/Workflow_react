@@ -25,12 +25,12 @@ function Flow(props) {
   const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes] = useState(intialnodes);
   const [edges, setEdges] = useState(intialedges);
-  
+
 
   const onPaneClick = useCallback((event) => {
     console.log('pane clicked')
-    if(nodeselect)
-    nodeselect.data.focus = false
+    if (nodeselect)
+      nodeselect.data.focus = false
     nodeselect = undefined
   }, []);
 
@@ -53,13 +53,13 @@ function Flow(props) {
   );
 
   const onNodeClick = useCallback((event, node) => {
-    if(nodeselect)
-    nodeselect.data.focus = false
+    if (nodeselect)
+      nodeselect.data.focus = false
     nodeselect = node
     nodeselect.data.focus = true
     onNodesChange(nodes)
     console.log(nodeselect)
-  }, [onNodesChange,nodes])
+  }, [onNodesChange, nodes])
 
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
@@ -87,8 +87,34 @@ function Flow(props) {
   );
 
   return (
-    <div style={{ width: '50vw', height: '100vh', display: 'flex', flexDirection: 'row' }}>
-       
+    <div style={{ width: '50vw', height: '100vh', display: 'flex', flexDirection:'column'}}>
+      <div className='buttons' >
+        <button onClick={() => {
+          setNodes([...nodes, { id: `node-${nodes.length + 1}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `Stage-${nodes.length + 1}`, att: [1], focus: false } }])
+        }}>Add Node</button>
+        <button onClick={() => {
+          console.dir(nodes)
+          console.dir(edges)
+          sessionStorage.setItem('Nodes', JSON.stringify(nodes))
+          sessionStorage.setItem('Edges', JSON.stringify(edges))
+
+        }}>Save</button>
+        <button onClick={() => {
+          if (nodeselect)
+            nodeselect.data.att = [...nodeselect.data.att, nodeselect.data.att.length + 1]
+          else
+            console.log('else')
+          setNodes(nodes.map(e => {
+            return { id: e.id, type: e.type, position: e.position, data: { value: e.data.value, att: [...e.data.att] } }
+          }))
+        }}>Add Attribute</button>
+        <button onClick={() => {
+          if (nodeselect) {
+            setNodes(nodes.filter(e => { return e.id !== nodeselect.id }))
+            setEdges(edges.filter(e => { return e.target !== nodeselect.id && e.source !== nodeselect.id }))
+          }
+        }}>Delete Node</button>
+      </div>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -105,33 +131,9 @@ function Flow(props) {
       >
         <Background color="#aaa" gap={16} />
       </ReactFlow>
-      <div>
-        <button onClick={() => {
-          setNodes([...nodes, { id: `node-${nodes.length+1}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `Stage-${nodes.length+1}`, att: [1],focus: false } }])
-        }}>Add Node</button>
-        <button onClick={() => {
-          console.dir(nodes)
-          console.dir(edges)
-          sessionStorage.setItem('Nodes', JSON.stringify(nodes))
-          sessionStorage.setItem('Edges', JSON.stringify(edges))
-          
-        }}>Save</button>
-        <button onClick={() => {
-          if(nodeselect)
-          nodeselect.data.att=[...nodeselect.data.att,nodeselect.data.att.length+1]
-          else
-          console.log('else')
-          setNodes(nodes.map(e=>{
-            return {id:e.id,type:e.type,position:e.position,data:{value:e.data.value,att:[...e.data.att]} }
-          }))
-        }}>Add Attribute</button>
-        <button onClick={()=>{
-          if(nodeselect){
-            setNodes(nodes.filter(e=> {return e.id !== nodeselect.id}))
-            setEdges(edges.filter(e=>{return e.target !== nodeselect.id && e.source !== nodeselect.id}))
-          }
-        }}>Delete Node</button>
-      </div>
+
+      {/* <Property-Panel /> */}
+
     </div>
   );
 }
