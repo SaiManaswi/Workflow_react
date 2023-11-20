@@ -3,7 +3,7 @@ import { Handle, Position } from 'reactflow';
 
 
 
-function TextUpdaterNode({ data, isConnectable }) {
+export default function TextUpdaterNode({ data, isConnectable }) {
   const onChange = useCallback((evt) => {
     console.log(evt.target.value);
   }, []);
@@ -29,4 +29,7 @@ function TextUpdaterNode({ data, isConnectable }) {
   );
 }
 
-export default TextUpdaterNode;
+export function AddAttri(){
+  
+
+}

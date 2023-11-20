@@ -6,8 +6,33 @@
   background: white;
 }
 
+.react-flow{
+  border-style: groove;
+  margin: 1%;
+  float: left;
+  width: auto;
+}
+
 .text-updater-node label {
   display: block;
   color: #777;
   font-size: 12px;
+}
+
+#flow{
+  float: left;
+}
+
+.property-panel{
+  border-style: groove;
+  height: 100%;
+  width: auto;
+  float: right;
+  text-align: center;
+  margin: 1%;
+}
+
+#Add-nodes:hover{
+
+  border-style: groove;
 }
