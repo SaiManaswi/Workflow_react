@@ -31,9 +31,6 @@ export default function Workflow() {
                     </List>
                 </div>
             </Drawer>
-            <div>
-                {/* Content goes here */}
-            </div>
         </>
     );
 }

@@ -21,7 +21,7 @@ if (sessionStorage.getItem('Edges'))
 // you could also use useMemo inside the component
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
-function Flow(props) {
+function Flow() {
   const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes] = useState(intialnodes);
   const [edges, setEdges] = useState(intialedges);
@@ -128,27 +128,31 @@ function Flow(props) {
             setEdges(edges.filter(e => { return e.target !== nodeselect.id && e.source !== nodeselect.id }))
           }
           else
-            console.log('Select a node to delete')
+            alert('Select a node to delete')
         }}>Delete Node</button>
         <div id='add-attributes'>
           <button onClick={() => {
             if (nodeselect) {
-              document.getElementById('attributes-list').style.display = 'block';
-              var name= document.getElementById('attrName').value;
-              var value=document.getElementById('attrValue').value;
-              nodeselect.data.att[nodeselect.data.att.length]=[name,value ];
-              // nodeselect.data.att = [...nodeselect.data.att, nodeselect.data.att.length + 1]
-             document.getElementById('attrName').value='';
-              document.getElementById('attrValue').value='';
+                document.getElementById('attributes-list').style.display = 'block';
+                var name = document.getElementById('attrName').value;
+                var value = document.getElementById('attrValue').value;
+                if (name!=''&& value!='') {
+                  name = document.getElementById('attrName').value;
+                value = document.getElementById('attrValue').value;
+                nodeselect.data.att[nodeselect.data.att.length] = [name, value];
+                // nodeselect.data.att = [...nodeselect.data.att, nodeselect.data.att.length + 1]
+                document.getElementById('attrName').value = '';
+                document.getElementById('attrValue').value = '';
+              } else alert("Enter the values to add attributes")
             }
             else
-              console.log('Select a node to add attributes.')
+              alert('Select a node to add attributes.')
             setNodes(nodes.map(e => {
               return { id: e.id, type: e.type, position: e.position, data: { value: e.data.value, att: [...e.data.att] } }
             }))
           }}>Add Attribute</button>
           <div id='attributes-list'>
-            <label htmlFor="text">Attribute-</label><br></br>
+            <label id='node-att' htmlFor="text">Attribute-</label><br></br>
             <input id='attrName' type='text' placeholder='Name of the attribute'></input>
             <input id='attrValue' type='text' placeholder='Value of the attribute'></input>
           </div>

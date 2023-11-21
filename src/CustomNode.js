@@ -17,10 +17,11 @@ export default function TextUpdaterNode({ data, isConnectable }) {
         <p>{data.value}</p>
         {
           data.att.map((e) => {
-            
+            if(e!=1) {
             return (<>
               <label htmlFor="text">{e[0]} : {e[1]}</label>
             </>)
+            }
           })
         }
         
@@ -29,4 +30,9 @@ export default function TextUpdaterNode({ data, isConnectable }) {
       <Handle type="source" position={Position.Bottom} id="b" isConnectable={isConnectable}/>
     </div>
   );
+}
+
+export function AddAttri(){
+  
+
 }
