@@ -32,7 +32,19 @@
   margin: 1%;
 }
 
-#Add-nodes:hover{
-
+#Add-nodes{
   border-style: groove;
+  border-right:none;
+  border-left: none;
+  padding: 10px;
+}
+
+#add-attributes{
+  margin: 10px;
+  padding: 10px;
+}
+
+#attributes-list{
+  display:block;
+  text-align: left;
 }

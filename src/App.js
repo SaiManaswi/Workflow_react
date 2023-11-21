@@ -109,10 +109,10 @@ function Flow(props) {
       <div className='property-panel' >
         <h4> Name of the workflow : #Workflow name </h4>
         <div id='Add-nodes'>
-        <h5> Create New Node : </h5>
+          <h5> Create New Node : </h5>
           <input type='text' id='nodename' placeholder='Enter node name'></input>
           <button onClick={() => {
-            setNodes([...nodes, { id: `node-${nodes.length + 1}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `Stage-${nodes.length + 1}`, att: [1], focus: false } }])
+            setNodes([...nodes, { id: `${document.getElementById('nodename').value}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `${document.getElementById('nodename').value}`, att: [1], focus: false } }])
           }}>Add Node</button>
         </div>
         <button onClick={() => {
@@ -121,21 +121,38 @@ function Flow(props) {
           sessionStorage.setItem('Nodes', JSON.stringify(nodes))
           sessionStorage.setItem('Edges', JSON.stringify(edges))
         }}>Save</button>
-        <button onClick={() => {
-          if (nodeselect)
-            nodeselect.data.att = [...nodeselect.data.att, nodeselect.data.att.length + 1]
-          else
-            console.log('else')
-          setNodes(nodes.map(e => {
-            return { id: e.id, type: e.type, position: e.position, data: { value: e.data.value, att: [...e.data.att] } }
-          }))
-        }}>Add Attribute</button>
+
         <button onClick={() => {
           if (nodeselect) {
             setNodes(nodes.filter(e => { return e.id !== nodeselect.id }))
             setEdges(edges.filter(e => { return e.target !== nodeselect.id && e.source !== nodeselect.id }))
           }
+          else
+            console.log('Select a node to delete')
         }}>Delete Node</button>
+        <div id='add-attributes'>
+          <button onClick={() => {
+            if (nodeselect) {
+              document.getElementById('attributes-list').style.display = 'block';
+              var name= document.getElementById('attrName').value;
+              var value=document.getElementById('attrValue').value;
+              nodeselect.data.att[nodeselect.data.att.length]=[name,value ];
+              // nodeselect.data.att = [...nodeselect.data.att, nodeselect.data.att.length + 1]
+             document.getElementById('attrName').value='';
+              document.getElementById('attrValue').value='';
+            }
+            else
+              console.log('Select a node to add attributes.')
+            setNodes(nodes.map(e => {
+              return { id: e.id, type: e.type, position: e.position, data: { value: e.data.value, att: [...e.data.att] } }
+            }))
+          }}>Add Attribute</button>
+          <div id='attributes-list'>
+            <label htmlFor="text">Attribute-</label><br></br>
+            <input id='attrName' type='text' placeholder='Name of the attribute'></input>
+            <input id='attrValue' type='text' placeholder='Value of the attribute'></input>
+          </div>
+        </div>
       </div>
     </div>
   );
