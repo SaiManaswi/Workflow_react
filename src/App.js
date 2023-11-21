@@ -112,7 +112,12 @@ function Flow() {
           <h5> Create New Node : </h5>
           <input type='text' id='nodename' placeholder='Enter node name'></input>
           <button onClick={() => {
-            setNodes([...nodes, { id: `${document.getElementById('nodename').value}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `${document.getElementById('nodename').value}`, att: [1], focus: false } }])
+            var nodename= document.getElementById('nodename').value;
+            if(nodename!==''){
+              setNodes([...nodes, { id: `${document.getElementById('nodename').value}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `${document.getElementById('nodename').value}`, att: [1], focus: false } }])
+              document.getElementById('nodename').value='';
+            }else alert("Enter the name of the Node")
+            
           }}>Add Node</button>
         </div>
         <button onClick={() => {
@@ -133,11 +138,11 @@ function Flow() {
         <div id='add-attributes'>
           <button onClick={() => {
             if (nodeselect) {
-                document.getElementById('attributes-list').style.display = 'block';
-                var name = document.getElementById('attrName').value;
-                var value = document.getElementById('attrValue').value;
-                if (name!=''&& value!='') {
-                  name = document.getElementById('attrName').value;
+              document.getElementById('attributes-list').style.display = 'block';
+              var name = document.getElementById('attrName').value;
+              var value = document.getElementById('attrValue').value;
+              if (name != '' && value != '') {
+                name = document.getElementById('attrName').value;
                 value = document.getElementById('attrValue').value;
                 nodeselect.data.att[nodeselect.data.att.length] = [name, value];
                 // nodeselect.data.att = [...nodeselect.data.att, nodeselect.data.att.length + 1]
