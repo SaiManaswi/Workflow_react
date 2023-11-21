@@ -1,14 +1,7 @@
-// import { useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
 
 
-
 export default function TextUpdaterNode({ data, isConnectable }) {
-  // const onChange = useCallback((evt) => {
-  //   console.log('what!')
-  //   console.log(evt.target.value);
-    
-  // }, []);
 
   return (
     <div className="text-updater-node" style={{border:`${data.focus? 2:1}px solid ${data.focus? 'pink':'black'}`}}>
@@ -30,9 +23,4 @@ export default function TextUpdaterNode({ data, isConnectable }) {
       <Handle type="source" position={Position.Bottom} id="b" isConnectable={isConnectable}/>
     </div>
   );
-}
-
-export function AddAttri(){
-  
-
 }
