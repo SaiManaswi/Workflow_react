@@ -33,10 +33,7 @@
 }
 
 #Add-nodes{
-  border-style: groove;
-  border-right:none;
-  border-left: none;
-  padding: 10px;
+  margin: 10px;
 }
 
 #add-attributes{
@@ -47,4 +44,29 @@
 #attributes-list{
   display:block;
   text-align: left;
+}
+#varients{
+  margin: 10px;
+}
+
+
+
+
+
+
+/* Workflow css */
+
+.upper{
+  width: 100%;
+  height: auto;
+  margin: 20px;
+  padding: 10px;
+  border-style: groove
+}
+.lower{
+  width: 100%;
+  height: auto;
+  margin: 20px;
+  padding: 10px;
+  border-style: groove
 }

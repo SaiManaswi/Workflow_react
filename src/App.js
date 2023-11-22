@@ -1,8 +1,13 @@
 import { useCallback, useState, useRef } from 'react';
-import ReactFlow, { applyEdgeChanges, applyNodeChanges, Background, MarkerType, updateEdge,Controls } from 'reactflow';
+import ReactFlow, { applyEdgeChanges, applyNodeChanges, Background, MarkerType, updateEdge, Controls, MiniMap, Panel } from 'reactflow';
 import 'reactflow/dist/style.css';
-import './App.css'
-
+// import Select, { SelectChangeEvent } from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
+// import InputLabel from '@mui/material/InputLabel';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import { MenuItem, InputLabel, Select, Button } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import TextUpdaterNode from './CustomNode.js';
 
 import './overview.css'
@@ -23,11 +28,15 @@ if (sessionStorage.getItem('Edges'))
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 function Flow() {
+
   const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes] = useState(intialnodes);
   const [edges, setEdges] = useState(intialedges);
+  const [variant, setVariant] = useState('dots');
 
-
+  const handleChange = (event) => {
+    setVariant(event.target.value);
+  };
   const onPaneClick = useCallback((event) => {
     console.log('pane clicked')
     if (nodeselect)
@@ -102,41 +111,45 @@ function Flow() {
         style={rfStyle}
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
+        fitView
       >
-        <Background color="#aaa" gap={16} />
         <Controls />
+        <MiniMap />
+        <Panel position="top-left">
+          <Button variant="contained" color="primary" startIcon={<SaveIcon />} onClick={() => {
+            sessionStorage.setItem('Nodes', JSON.stringify(nodes))
+            sessionStorage.setItem('Edges', JSON.stringify(edges))
+            alert('Saved Successfully')
+          }}>Save</Button>
+        </Panel>
+        <Background color="#aaa" gap={16} variant={variant} />
       </ReactFlow>
 
       {/* <Property-Panel /> */}
       <div className='property-panel' >
         <h4> Name of the workflow : Intern Hiring </h4>
         <div id='Add-nodes'>
-          <h5> Create New Node : </h5>
+          <h4> Create New Node : </h4>
           <input type='text' id='nodename' placeholder='Enter node name'></input>
           <button onClick={() => {
-            var nodename= document.getElementById('nodename').value;
-            if(nodename!==''){
+            var nodename = document.getElementById('nodename').value;
+            if (nodename !== '') {
               setNodes([...nodes, { id: `${document.getElementById('nodename').value}`, type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: `${document.getElementById('nodename').value}`, att: [1], focus: false } }])
-              document.getElementById('nodename').value='';
-            }else alert("Enter the name of the Node")
-            
+              document.getElementById('nodename').value = '';
+            } else alert("Enter the name of the Node")
+
           }}>Add Node</button>
         </div>
-        <button onClick={() => {
-          console.dir(nodes)
-          console.dir(edges)
-          sessionStorage.setItem('Nodes', JSON.stringify(nodes))
-          sessionStorage.setItem('Edges', JSON.stringify(edges))
-        }}>Save</button>
-
-        <button onClick={() => {
+        <Divider />
+        <Button variant="filledTonal" startIcon={<DeleteIcon />} onClick={() => {
           if (nodeselect) {
             setNodes(nodes.filter(e => { return e.id !== nodeselect.id }))
             setEdges(edges.filter(e => { return e.target !== nodeselect.id && e.source !== nodeselect.id }))
           }
           else
             alert('Select a node to delete')
-        }}>Delete Node</button>
+        }}>  Delete </Button>
+        <Divider />
         <div id='add-attributes'>
           <button onClick={() => {
             if (nodeselect) {
@@ -164,6 +177,20 @@ function Flow() {
             <input id='attrValue' type='text' placeholder='Value of the attribute'></input>
           </div>
         </div>
+        <Divider />
+        <div id='varients'>
+          <h4>Select the varients of the graph</h4>
+          <Select
+            id="demo-simple-select-helper"
+            value={variant}
+            onChange={handleChange}
+          >
+            <MenuItem value={'dots'}>Dots</MenuItem>
+            <MenuItem value={'cross'}>Cross</MenuItem>
+            <MenuItem value={'lines'}>Lines</MenuItem>
+          </Select>
+        </div>
+        <Divider />
       </div>
     </div>
   );
