@@ -10,7 +10,7 @@ export default function TextUpdaterNode({ data, isConnectable }) {
         <p>{data.value}</p>
         {
           data.att.map((e) => {
-            if(e!=1) {
+            if(e!==1) {
             return (<>
               <label htmlFor="text">{e[0]} : {e[1]}</label>
             </>)

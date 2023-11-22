@@ -9,7 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { MenuItem, InputLabel, Select, Button } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import TextUpdaterNode from './CustomNode.js';
-
+import './App.css'
 import './overview.css'
 
 const rfStyle = {
