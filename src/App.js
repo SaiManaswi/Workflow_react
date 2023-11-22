@@ -1,6 +1,7 @@
 import { useCallback, useState, useRef } from 'react';
-import ReactFlow, { applyEdgeChanges, applyNodeChanges, Background, MarkerType, updateEdge } from 'reactflow';
+import ReactFlow, { applyEdgeChanges, applyNodeChanges, Background, MarkerType, updateEdge,Controls } from 'reactflow';
 import 'reactflow/dist/style.css';
+import './App.css'
 
 import TextUpdaterNode from './CustomNode.js';
 
@@ -103,11 +104,12 @@ function Flow() {
         onPaneClick={onPaneClick}
       >
         <Background color="#aaa" gap={16} />
+        <Controls />
       </ReactFlow>
 
       {/* <Property-Panel /> */}
       <div className='property-panel' >
-        <h4> Name of the workflow : #Workflow name </h4>
+        <h4> Name of the workflow : Intern Hiring </h4>
         <div id='Add-nodes'>
           <h5> Create New Node : </h5>
           <input type='text' id='nodename' placeholder='Enter node name'></input>
