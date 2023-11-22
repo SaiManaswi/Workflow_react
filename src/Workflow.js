@@ -1,113 +1,90 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { Box, Divider, TextField } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import ButtonBase from '@mui/material/ButtonBase';
-
-import './overview.css'
-
-function Item(props) {
-    const { sx, ...other } = props;
-    return (
-        <Box
-            sx={{
-                boxShadow: 2,
-                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#fff'),
-                color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
-                border: '1px solid',
-                borderColor: (theme) =>
-                    theme.palette.mode === 'dark' ? 'grey.800' : 'grey.300',
-                p: 1,
-                borderRadius: 2,
-                fontSize: '0.875rem',
-                fontWeight: '700',
-                ...sx,
-            }}
-            {...other}
-        />
-    );
-}
-
-Item.propTypes = {
-    /**
-     * The system prop that allows defining system overrides as well as additional CSS styles.
-     */
-    sx: PropTypes.oneOfType([
-        PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool]),
-        ),
-        PropTypes.func,
-        PropTypes.object,
-    ]),
-};
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
+import './overview.css';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  TextField,
+  Divider,
+  Button,
+  IconButton,
+} from '@mui/material';
 
 export default function RowAndColumnGap() {
-    return (
-        <>
-            <div className='upper'>
-                <h1> Create a New Workflow </h1>
-
-                <TextField id="standard-basic" label="Standard" variant="standard" />
-
-            </div> <br></br>
-
-            <Divider />
-
-            <div className='lower' style={{ width: '100%' }}>
-                <Box
-                    sx={{
-                        display: 'grid',
-                        columnGap: 3,
-                        rowGap: 1,
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                    }}
-                >
-                    <Item> <ComplexGrid /> </Item>
-                    <Item> <ComplexGrid /> </Item>
-                    <Item> <ComplexGrid /> </Item>
-                    <Item> <ComplexGrid /> </Item>
-                </Box>
-            </div>
-        </>
-    );
-}
+  const [workflowName, setWorkflowName] = React.useState('');
+  const [workflows, setWorkflows] = React.useState([]);
+  const navigate = useNavigate();
 
 
-const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-});
+  function handleDeleteRow(index) {
+    const newWorkflows = [...workflows];
+    newWorkflows.splice(index, 1);
+    setWorkflows(newWorkflows);
+  }
 
-function ComplexGrid() {
-    return (
-        <Paper
-            sx={{
-                p: 2,
-                margin: 'auto',
-                maxWidth: 500,
-                flexGrow: 1,
-                backgroundColor: (theme) =>
-                    theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-            }}
+  function createWorkflow() {
+    if (workflowName) {
+      setWorkflows((prevWorkflows) => [
+        ...prevWorkflows,
+        { name: workflowName, imageUrl: 'C:/Users/user/Desktop/Deepika_assessments/Workflow_react/src/Screenshot.png' }, // Add imageUrl property
+      ]);
+      setWorkflowName('');
+    }
+  }
+
+  function handleWorkflowClick(workflowName) {
+    navigate(`/workflow/${workflowName}`);
+  }
+
+  return (
+    <div className='container'>
+      <div className="upper">
+        <h1> Create a New Workflow </h1>
+        <TextField
+          id="workflowName"
+          label="Name of the workflow"
+          value={workflowName}
+          onChange={(e) => setWorkflowName(e.target.value)}
+          variant="standard"
+        />
+        <Button
+          variant="contained"
+          
+          onClick={createWorkflow}
         >
-            <Grid container spacing={2}>
-                <Grid item>
-                    <ButtonBase sx={{ width: 128, height: 128 }}>
-                        <Img alt="complex" src="/Screenshot.png" />
-                    </ButtonBase>
-                </Grid>
-                <Grid item xs={12} sm container direction="column" spacing={2}>
-                    <Typography gutterBottom variant="subtitle1" component="div">
-                        Workflow Name #
-                    </Typography>
-                </Grid>
-            </Grid>
-            
-        </Paper>
-    );
+          Create WorkFlow
+        </Button>
+        <Divider />
+      </div>
+      <br />
+      <Divider />
+      <div className="lower">
+        <List>
+          {workflows.map((workflow, index) => (
+            <ListItem
+              key={index}
+              onClick={() => handleWorkflowClick(workflow.name)}
+              button
+            >
+              <ListItemAvatar>
+                <Avatar alt={workflow.name} src={workflow.imageUrl} />
+              </ListItemAvatar>
+              <ListItemText primary={workflow.name} />
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => handleDeleteRow(index)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    </div>
+  );
 }

@@ -1,15 +1,13 @@
 import { useCallback, useState, useRef } from 'react';
 import ReactFlow, { applyEdgeChanges, applyNodeChanges, Background, MarkerType, updateEdge, Controls, MiniMap, Panel } from 'reactflow';
 import 'reactflow/dist/style.css';
-// import Select, { SelectChangeEvent } from '@mui/material/Select';
-// import MenuItem from '@mui/material/MenuItem';
-// import InputLabel from '@mui/material/InputLabel';
+import { useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import { MenuItem, InputLabel, Select, Button } from '@mui/material';
+import { MenuItem, Select, Button } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import TextUpdaterNode from './CustomNode.js';
-import './App.css'
+
 import './overview.css'
 
 const rfStyle = {
@@ -28,7 +26,7 @@ if (sessionStorage.getItem('Edges'))
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 function Flow() {
-
+  const { workflowName } = useParams();
   const edgeUpdateSuccessful = useRef(true);
   const [nodes, setNodes] = useState(intialnodes);
   const [edges, setEdges] = useState(intialedges);
@@ -127,7 +125,8 @@ function Flow() {
 
       {/* <Property-Panel /> */}
       <div className='property-panel' >
-        <h4> Name of the workflow : Intern Hiring </h4>
+        <h4> Name of the workflow : {workflowName} </h4>
+        <Divider />
         <div id='Add-nodes'>
           <h4> Create New Node : </h4>
           <input type='text' id='nodename' placeholder='Enter node name'></input>
@@ -156,7 +155,7 @@ function Flow() {
               document.getElementById('attributes-list').style.display = 'block';
               var name = document.getElementById('attrName').value;
               var value = document.getElementById('attrValue').value;
-              if (name != '' && value != '') {
+              if (name !=='' && value != '') {
                 name = document.getElementById('attrName').value;
                 value = document.getElementById('attrValue').value;
                 nodeselect.data.att[nodeselect.data.att.length] = [name, value];
