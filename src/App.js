@@ -155,7 +155,7 @@ function Flow() {
               document.getElementById('attributes-list').style.display = 'block';
               var name = document.getElementById('attrName').value;
               var value = document.getElementById('attrValue').value;
-              if (name !=='' && value !== '') {
+              if (name !=='' && value != '') {
                 name = document.getElementById('attrName').value;
                 value = document.getElementById('attrValue').value;
                 nodeselect.data.att[nodeselect.data.att.length] = [name, value];
