@@ -11,8 +11,8 @@ root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path="/" element={<Workflow />} />
-        <Route path="/workflow/:workflowName" element={<Flow />} />
+        <Route path="/" element={<Flow />} />
+        <Route path="/workflow/:workflowName" element={<Workflow />} />
       </Routes>
     </Router>
   </React.StrictMode>
