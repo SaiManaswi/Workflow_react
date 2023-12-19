@@ -79,7 +79,10 @@ function Flow() {
   const onConnect = useCallback(
     (connection) => {
       setEdges([...edges, {
-        id: `e${connection.source}-${connection.target}`, source: `${connection.source}`, target: `${connection.target}`, markerEnd: {
+        id: `e${connection.source}-${connection.target}`, 
+        source: `${connection.source}`, 
+        target: `${connection.target}`, 
+        markerEnd: {
           type: MarkerType.ArrowClosed,
           width: 20,
           height: 20,
@@ -87,9 +90,9 @@ function Flow() {
         },
         style: {
           strokeWidth: 1,
-          stroke: 'green',
+          stroke: 'black',
         },
-        animated: true
+        animated: false
       }])
     }, [edges]
   );
@@ -111,7 +114,7 @@ function Flow() {
         onPaneClick={onPaneClick}
         fitView
       >
-        <Controls />
+        <Controls > </Controls>
         <MiniMap />
         <Panel position="top-left">
           <Button variant="contained" color="primary" startIcon={<SaveIcon />} onClick={() => {
@@ -155,7 +158,7 @@ function Flow() {
               document.getElementById('attributes-list').style.display = 'block';
               var name = document.getElementById('attrName').value;
               var value = document.getElementById('attrValue').value;
-              if (name !=='' && value != '') {
+              if (name !=='' && value !== '') {
                 name = document.getElementById('attrName').value;
                 value = document.getElementById('attrValue').value;
                 nodeselect.data.att[nodeselect.data.att.length] = [name, value];
